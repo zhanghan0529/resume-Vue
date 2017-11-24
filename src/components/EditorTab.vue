@@ -2,74 +2,124 @@
   <div id="editor">
     <ul class='class-icons' >
       <li v-for = "(item,index) in resume.config" v-bind:class="{active:choosetab===index}" @click = 'choosetab = index'>
-              <svg class="icon" aria-hidden="true" >
+            <svg class="icon" aria-hidden="true" >
             <use v-bind:xlink:href="`#icon-${resume.config[index].icon}`"></use>
          </svg>
       </li>
+
     </ul>
     <ul class='to-input'>
-      <li v-for = "(item,index) in resume.config" v-bind:class='{active:choosetab===index}'>
-        <div v-for = '(value,key) in resume[item.field]'>
-       <label>{{key}}</label>
-            <el-input v-model="resume[item.field][key]" placeholder="请输入内容"></el-input>
+
+      <!-- <li v-for = "(item,index) in resume.config" v-bind:class='{active:choosetab===index}'>
+        <div v-if='resume[item.field] instanceof Array'>
+          <div v-for='sumitem in resume[item.field]'>
+           <div v-for='(value,key) in sumitem'>
+            <label>{{key}}</label>
+            <el-input :value="value" placeholder="请输入内容"></el-input>
+           </div>
+          </div>
+        </div>
+        <div v-else v-for = '(value,key) in resume[item.field]'>
+          <label>{{key}}</label>
+          <el-input :value="value" @input = 'changedata(item.field,key,$event)' placeholder="请输入内容"></el-input>
         </div>   
-      </li> 
-      <!-- <li v-bind:class='{active:choosetab===1}'>2</li>
-      <li v-bind:class='{active:choosetab===2}'>3</li>
-      <li v-bind:class='{active:choosetab===3}'>4</li>
-      <li v-bind:class='{active:choosetab===4}'>5</li>
-      <li v-bind:class='{active:choosetab===5}'>6</li> -->
+      </li>  -->
+      <li v-bind:class='{active:choosetab===0}'>
+        <div v-for='(value,key) in resume.profile'>
+          <label>{{key}}</label>  
+          <el-input :value="value" @input = 'changedata(`${"profile"}.${key}`,$event)' placeholder="请输入内容"></el-input>
+        </div>
+      </li>
+      <li v-bind:class='{active:choosetab===1}'>
+        <div v-for='(value,key) in resume.workhistory'>
+          <div v-if='key==="时间"'>
+            <label style='display:block'>{{key}}</label>      
+              <el-date-picker :value="value" @input = 'changedata(`${"workhistory"}.${key}`,$event)' type="month" value-format ='yyyy.MM' placeholder="选择日期"></el-date-picker>
+          </div>
+          <div v-else>
+            <label>{{key}}</label>  
+               <el-input :value="value" @input = 'changedata(`${"workhistory"}.${key}`,$event)' placeholder="请输入内容"></el-input>
+          </div>
+        </div>
+      </li>
+      <li v-bind:class='{active:choosetab===2}'>
+        <div class="projects" v-for='(item,i) in resume.projects'>
+          <div v-for ='(value,key) in item'>
+             <div v-if = 'key==="项目简介"'>
+               <label>{{key}}</label> 
+               <el-input type="textarea" :rows="4"  @input = 'changedata(`${"projects"}.${i}.${key}`,$event)' placeholder="请输入内容" ></el-input>
+             </div>
+             <div v-else>
+               <label>{{key}}</label>
+                <el-input :value="value" @input = 'changedata(`${"projects"}.${i}.${key}`,$event)' placeholder="请输入内容"></el-input>
+             </div>
+          </div>
+        </div>
+        <i class="el-icon-circle-plus" @click.prevent='add1'></i>
+      </li>
+      <li v-bind:class='{active:choosetab===3}'>
+         <div v-for='(value,key) in resume.school'>
+          <div v-if='key==="time"'>
+            <label>时间</label>  
+              <el-date-picker :value="value" @input = 'changedata(`${"school"}.${key}`,$event)' value-format ='yyyy.MM' type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
+              </el-date-picker>
+          </div>
+          <div v-else>
+            <label>{{key}}</label>  
+               <el-input :value="value" @input = 'changedata(`${"school"}.${key}`,$event)' placeholder="请输入内容"></el-input>
+          </div>
+        </div>
+      </li>
+      <li v-bind:class='{active:choosetab===4}'>
+        <div v-for='(item,i) in resume.awards'>
+          <div v-for ='(value,key) in item'>
+             <div v-if = 'key==="time"'>
+              <label>时间</label>  
+              <el-date-picker :value="value" @input = 'changedata(`${"awards"}.${i}.${key}`,$event)' type="month" value-format ='yyyy.MM' placeholder="选择日期"></el-date-picker>
+             </div>
+             <div v-else>
+               <label>{{key}}</label>
+                <el-input :value="value" @input = 'changedata(`${"awards"}.${i}.${key}`,$event)' placeholder="请输入内容"></el-input>
+             </div>
+          </div>
+        </div>
+      </li>
+      <li v-bind:class='{active:choosetab===5}'>
+        <div v-for ='(value,key) in resume.introduce'>
+            <label>{{key}}</label> 
+          <el-input type="textarea" :rows="4"  @input = 'changedata(`${"introduce"}.${key}`,$event)' placeholder="请输入内容" ></el-input>
+        </div>
+      </li>
     </ul>
   </div>
 </template>
 <script>
 export default {
-  data() {
-    return {
-      choosetab: 0,
-      resume: {
-        config: [
-          { field: "profile", icon: "mingpian" },
-          { field: "workhistory", icon: "bag" },
-          { field: "projects", icon: "xiangmu" },
-          { field: "school", icon: "xuexiao" },
-          { field: "awards", icon: "jiangbei" },
-          { field: "contancts", icon: "phone" }
-        ],
-        profile: {
-          name: "",
-          city: "",
-          title: ""
-        },
-        workhistory:{
-          公司:'',
-          职位:'',
-          时间:''
-        },
-        projects:{
-          项目:'',
-          时间:'',
-          线上地址:''
-        },
-        school:{
-          学校:'',
-          起止时间:'',
-          学位:''
-        },
-        awards:{
-          获奖时间:'',
-          获奖内容:''
-        },
-        contancts:{
-          手机:'',
-          QQ:'',
-          Email:'',
-          WeChat:'',
-          Github:''
-        }
+  name: "EditorTab",
+  computed: {
+    choosetab: {
+      get() {
+        return this.$store.state.choosetab;
+      },
+      set(index) {
+        return this.$store.commit("switchTab", index);
       }
-      // whatcontent: [ "mingpian","bag","xiangmu","xuexiao","jiangbei","phone"],
-    };
+    },
+    resume() {
+      return this.$store.state.resume;
+    }
+  },
+  methods: {
+    add1(){
+      this.$store.commit("addproject");
+    },
+    changedata(path, value) {
+      console.log(path);
+      this.$store.commit("updata", {
+        path,
+        value
+      });
+    }
   }
 };
 </script>
@@ -101,11 +151,26 @@ export default {
     }
   }
   .to-input {
-    margin: 16px;
-    background: white;
+    padding: 16px 32px;
+    overflow: auto;
+    // background: white;
     flex: 1;
     li {
       display: none;
+      margin: 0 auto;
+      div{
+        margin: 8px 0;
+      }
+      .el-textarea__inner:focus {
+        border-color:#bbb;
+        outline: 0;
+        /* text-shadow: 0 0 black; */
+      }
+      .el-input__inner:focus {
+        border-color:#bbb;
+        outline: 0;
+        /* text-shadow: 0 0 black; */
+      }
     }
     .active {
       display: block;

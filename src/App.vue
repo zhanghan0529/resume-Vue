@@ -7,25 +7,20 @@
     </div>
   </div>
 </template>
-
 <script>
-import "./css/reset.css";
+
 import TopBar from "./components/TopBar";
 import EditorTab from "./components/EditorTab";
 import Preview from "./components/Preview";
-import Vue from 'vue'
-import { Button,Input } from 'element-ui'
-
-Vue.use(Button);
-Vue.use(Input)
+import store from './store/index'
 export default {
   name: "app",
+  store,
   components: {
     TopBar,EditorTab,Preview
   }
 };
 </script>
-
 <style>
 @keyframes fade-in{
   0%{opacity:0;}
