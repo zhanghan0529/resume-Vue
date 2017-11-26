@@ -132,8 +132,8 @@ export default {
   border-radius: 5px;
   margin-right: 1rem;
   display: flex;
-  overflow: hidden;
   animation: fade-in 0.3s;
+  overflow: hidden;
   .class-icons {
     height: 100%;
     background: #555;

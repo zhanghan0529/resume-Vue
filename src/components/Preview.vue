@@ -2,7 +2,13 @@
   <div id='preview'>
 {{count.profile}}
 {{count.workhistory}}
-{{count.projects[0].项目}}
+<div v-for = 'item in count.projects'>
+<div v-for = '(value,key) in item'>
+  {{key}}
+  {{value}}
+</div>
+</div>
+
 {{count.school}}
 {{count.awards}}
 {{count.introduce}}

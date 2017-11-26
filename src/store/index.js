@@ -1,9 +1,11 @@
 import Vuex from "vuex";
 import Vue from "vue";
-import objectPath from "object-path"
+import objectPath from "object-path";
 Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
+    current: 0,
+    Login: 1,
     count: 0,
     choosetab: 0,
     resume: {
@@ -25,14 +27,14 @@ export default new Vuex.Store({
         求职意向: ""
       },
       workhistory: {
-        公司:'',
+        公司: "",
         时间: "",
         职位: ""
       },
       projects: [
         {
           项目: "",
-          项目简介:"",
+          项目简介: "",
           预览地址: ""
         }
       ],
@@ -58,15 +60,21 @@ export default new Vuex.Store({
     switchTab(state, payload) {
       state.choosetab = payload;
     },
-    updata(state, {path, value}) {
-        objectPath.set(state.resume,path,value)
+    updata(state, { path, value }) {
+      objectPath.set(state.resume, path, value);
     },
-    addproject(state){
-        state.resume.projects.push({
-          项目: "",
-          项目简介: "",
-          预览地址: ""
-        });
+    addproject(state) {
+      state.resume.projects.push({
+        项目: "",
+        项目简介: "",
+        预览地址: ""
+      });
+    },
+    signup(state) {
+      state.Login = 0;
+    },
+    login(state) {
+      state.Login = 1;
     }
   }
 });

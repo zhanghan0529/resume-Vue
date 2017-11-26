@@ -1,9 +1,14 @@
 <template>
   <div id="app">
-    <TopBar/>
-    <div class='content'>
-    <EditorTab/>
-    <Preview/>
+    <div v-if = 'count.current===0'>
+      <Login/>
+    </div>
+    <div v-else class="seciton">
+      <TopBar/>
+      <div class='content'>
+        <EditorTab/>
+        <Preview/>
+      </div>
     </div>
   </div>
 </template>
@@ -12,12 +17,19 @@
 import TopBar from "./components/TopBar";
 import EditorTab from "./components/EditorTab";
 import Preview from "./components/Preview";
+import Login from './components/Login'
 import store from './store/index'
+import './css/csshake-slow.min.css'
 export default {
   name: "app",
   store,
   components: {
-    TopBar,EditorTab,Preview
+    TopBar,EditorTab,Preview,Login
+  },
+  computed:{
+    count(){
+    return this.$store.state;
+    }
   }
 };
 </script>
@@ -28,10 +40,13 @@ export default {
 }
 #app {
   background:#f7fafc;
-  height: 100vh;
-  padding:16px;
-  display: flex;
-  flex-direction: column;
+}
+.seciton{
+  /* height: 100%; */
+    padding:16px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 .content{
   margin-top: 16px;
