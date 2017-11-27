@@ -134,6 +134,7 @@ export default {
   display: flex;
   animation: fade-in 0.3s;
   overflow: hidden;
+  background: #f7fafc;
   .class-icons {
     height: 100%;
     background: #555;

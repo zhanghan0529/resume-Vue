@@ -17,12 +17,15 @@
 import TopBar from "./components/TopBar";
 import EditorTab from "./components/EditorTab";
 import Preview from "./components/Preview";
-import Login from './components/Login'
-import store from './store/index'
-import './css/csshake-slow.min.css'
+import Login from './components/Login';
+import store from './store/index';
+import AV from './lib/leancloud';
+import './css/csshake-slow.min.css';
+
 export default {
   name: "app",
   store,
+  AV,
   components: {
     TopBar,EditorTab,Preview,Login
   },
@@ -39,7 +42,8 @@ export default {
   100%{opacity:1;}
 }
 #app {
-  background:#f7fafc;
+  background:linear-gradient(to bottom, #8ac0e2, #f7fafc);
+
 }
 .seciton{
   /* height: 100%; */

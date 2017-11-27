@@ -33,5 +33,6 @@ export default {
   border-radius: 5px;
   flex: 1;
   animation: fade-in 0.3s;
+  background: #f7fafc;
 }
 </style>

@@ -8,6 +8,7 @@ export default new Vuex.Store({
     Login: 1,
     count: 0,
     choosetab: 0,
+    currentUser: null,
     resume: {
       config: [
         { field: "profile", icon: "mingpian" },

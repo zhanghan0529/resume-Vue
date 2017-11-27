@@ -9,30 +9,76 @@
     </div>
     <div class="loginandsign">
         <div class="logined" v-if = 'count.Login===1'>
-            <input type="text"  value="" placeholder="账号">
-            <input type="password"  value="" placeholder="密码">
+          <form @submit.prevent='Login'>
+            <input type="text" v-model = 'formData.username' value="" placeholder="账号">
+            <input type="password" v-model='formData.password' value="" placeholder="密码">
             <a class="linksign" @click='signup'>没有账号,赶紧注册~</a>
-            <a class="loginbtn">登陆</a>
+            <input class="loginbtn" type = 'submit' value='登陆'>
+            <div class='message'>{{message}}</div>
+          </form>
         </div>
         <div class="signup" v-else>
-            <input type="text"  value="" placeholder="账号">
-            <input type="password"  value="" placeholder="密码">
-            <input type="password"  value="" placeholder="确认密码">
-            <a class="loginbtn" @click = 'login'>注册</a>
+          <form @submit.prevent = 'signUp'>
+            <input type="text" v-model = 'formData.username' value="" placeholder="账号">
+            <input type="password" v-model='formData.password' value="" placeholder="密码">
+            <input type="password" v-model='formData.cfpassword' value="" placeholder="确认密码">
+            <input class="loginbtn" type = 'submit' value='注册'>
+            <div class='message'>{{message}}</div>
+            <a class="linksign" @click='login'>已有账号,回去登陆~</a>
+          </form>
         </div>
     </div>
   </div>
 </div>
 </template>
 <script>
+import AV from "../lib/leancloud";
 export default {
-  methods: {
-      signup(){
-          this.$store.commit('signup');
-      },
-      login(){
-          this.$store.commit('login')
+  data() {
+    return {
+      message: "",
+      formData: {
+        username: "",
+        password: "",
+        cfpassword: ""
       }
+    };
+  },
+  methods: {
+    signUp() {
+      let { username, password, cfpassword } = this.formData;
+      let user = new AV.User();
+      if (password === cfpassword) {
+        user.setUsername(username);
+        user.setPassword(password);
+        user.signUp().then(loginedUser => {
+          this.message = "注册成功";
+          // this.$store.commit("login");
+        },
+        function(error) {
+          alert("注册失败⊙﹏⊙") ;
+        });
+      } else {
+        this.message = "两次密码不一致~";
+      }
+    },
+    Login() {
+      let { username, password } = this.formData;
+      AV.User
+        .logIn(username, password)
+        .then(loginedUser => {}, function(error) {
+          // this.message = "用户不存在或者密码错误~";
+          alert("用户不存在或者密码错误~");
+        });
+    },
+    signup() {
+      this.$store.commit("signup");
+      this.message = "";
+    },
+    login() {
+      this.$store.commit("login");
+      this.message = "";
+    }
   },
   computed: {
     count() {
@@ -43,13 +89,12 @@ export default {
 </script>
 
 <style lang= 'scss'>
-
 .login {
   display: flex;
   height: 100vh;
   justify-content: center;
   align-items: center;
-   animation: fade-in 0.3s;
+  animation: fade-in 0.3s;
   > div {
     width: 50%;
     height: 50%;
@@ -69,6 +114,7 @@ export default {
         box-shadow: 0 1px 2px 2px rgba(0, 0, 0, 0.16),
           0 1px 2px 0px rgba(0, 0, 0, 0.08);
         padding: 16px;
+        background: #f7fafc;
       }
       .words {
         font-size: 1.2rem;
@@ -83,13 +129,17 @@ export default {
       align-items: center;
       text-align: center;
       animation: fade-in 0.4s;
-      .signup,
-      .logined {
+      .signup form,
+      .logined form {
         /* height: 100%; */
         display: flex;
         flex-direction: column;
         justify-content: center;
-        animation: fade-in 1s;
+        .message {
+          color: #ff6122;
+          font-size: 1rem;
+          margin-bottom: 4px;
+        }
       }
       input {
         width: 100%;
@@ -119,7 +169,8 @@ export default {
         margin: 8px auto;
         cursor: pointer;
       }
-      .linksign:hover,.loginbtn:hover {
+      .linksign:hover,
+      .loginbtn:hover {
         opacity: 0.8;
       }
     }
