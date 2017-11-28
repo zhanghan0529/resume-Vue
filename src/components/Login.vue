@@ -55,8 +55,8 @@ export default {
           this.message = "注册成功";
           // this.$store.commit("login");
         },
-        function(error) {
-          alert("注册失败⊙﹏⊙") ;
+        (error)=> {
+          this.message = "注册失败⊙﹏⊙" ;
         });
       } else {
         this.message = "两次密码不一致~";
@@ -66,9 +66,9 @@ export default {
       let { username, password } = this.formData;
       AV.User
         .logIn(username, password)
-        .then(loginedUser => {}, function(error) {
+        .then(loginedUser => {}, (error)=> {
           // this.message = "用户不存在或者密码错误~";
-          alert("用户不存在或者密码错误~");
+          this.message = "用户不存在或者密码错误~";
         });
     },
     signup() {
@@ -119,7 +119,7 @@ export default {
       .words {
         font-size: 1.2rem;
         margin-top: 16px;
-        color: #bbb;
+        color: #aaa;
       }
     }
 
@@ -137,7 +137,7 @@ export default {
         justify-content: center;
         .message {
           color: #ff6122;
-          font-size: 1rem;
+          font-size: 0.8rem;
           margin-bottom: 4px;
         }
       }

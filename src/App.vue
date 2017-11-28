@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div v-if = 'count.current===0'>
+    <div v-if = 'count.current===1'>
       <Login/>
     </div>
     <div v-else class="seciton">
@@ -26,6 +26,13 @@ export default {
   name: "app",
   store,
   AV,
+  created(){
+    let state = localStorage.getItem('state')
+    if(state){
+      state = JSON.parse(state)
+    }
+    this.$store.commit('initState',state)
+  },
   components: {
     TopBar,EditorTab,Preview,Login
   },

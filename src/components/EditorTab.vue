@@ -27,35 +27,44 @@
       <li v-bind:class='{active:choosetab===0}'>
         <div v-for='(value,key) in resume.profile'>
           <label>{{key}}</label>  
-          <el-input :value="value" @input = 'changedata(`${"profile"}.${key}`,$event)' placeholder="请输入内容"></el-input>
+          <el-input :value="value" @input = 'changedata(`${"profile"}.${key}`,$event)' v-bind:placeholder="`请输入${key}`"></el-input>
         </div>
       </li>
       <li v-bind:class='{active:choosetab===1}'>
-        <div v-for='(value,key) in resume.workhistory'>
-          <div v-if='key==="时间"'>
-            <label style='display:block'>{{key}}</label>      
-              <el-date-picker :value="value" @input = 'changedata(`${"workhistory"}.${key}`,$event)' type="month" value-format ='yyyy.MM' placeholder="选择日期"></el-date-picker>
-          </div>
-          <div v-else>
+        <div class="workhistory" v-for="(item,i) in resume.workhistory">
+          <div v-for='(value,key) in item'>
+            <div v-if='key==="开始时间"||key==="结束时间"'>
+              <label>{{key}}</label>      
+             <!-- <el-date-picker :value="value" @input = 'changedata(`${"workhistory"}.${i}.${key}`,$event)' value-format ='yyyy.MM' type="daterange" selectableRange= "string" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">ZA
+              </el-date-picker> -->
+              <el-date-picker :value="value" @input = 'changedata(`${"workhistory"}.${i}.${key}`,$event)' type="month" value-format ='yyyy.MM' placeholder="选择日期"></el-date-picker>
+            </div>
+           <div v-else>
             <label>{{key}}</label>  
-               <el-input :value="value" @input = 'changedata(`${"workhistory"}.${key}`,$event)' placeholder="请输入内容"></el-input>
-          </div>
+               <el-input :value="value" @input = 'changedata(`${"workhistory"}.${i}.${key}`,$event)' v-bind:placeholder="`请输入${key}名称`"></el-input>
+           </div>
+         </div>
+             <i class="el-icon-delete" @click.prevent='deleteitem(item,"workhistory")'></i>
+             <hr>
         </div>
+        <button class="addmore" @click.prevent='additem("workhistory")'>+</button>
       </li>
       <li v-bind:class='{active:choosetab===2}'>
         <div class="projects" v-for='(item,i) in resume.projects'>
           <div v-for ='(value,key) in item'>
              <div v-if = 'key==="项目简介"'>
                <label>{{key}}</label> 
-               <el-input type="textarea" :rows="4"  @input = 'changedata(`${"projects"}.${i}.${key}`,$event)' placeholder="请输入内容" ></el-input>
+               <el-input type="textarea" :rows="4"  @input = 'changedata(`${"projects"}.${i}.${key}`,$event)'  v-bind:placeholder="`请输入${key}`" ></el-input>
              </div>
              <div v-else>
                <label>{{key}}</label>
                 <el-input :value="value" @input = 'changedata(`${"projects"}.${i}.${key}`,$event)' placeholder="请输入内容"></el-input>
              </div>
           </div>
+             <i class="el-icon-delete" @click.prevent='deleteitem(item,"projects")'></i>
+          <hr>
         </div>
-        <i class="el-icon-circle-plus" @click.prevent='add1'></i>
+        <button class="addmore" @click.prevent='additem("projects")'>+</button>
       </li>
       <li v-bind:class='{active:choosetab===3}'>
          <div v-for='(value,key) in resume.school'>
@@ -66,28 +75,33 @@
           </div>
           <div v-else>
             <label>{{key}}</label>  
-               <el-input :value="value" @input = 'changedata(`${"school"}.${key}`,$event)' placeholder="请输入内容"></el-input>
+               <el-input :value="value" @input = 'changedata(`${"school"}.${key}`,$event)' v-bind:placeholder="`请输入${key}`"></el-input>
           </div>
         </div>
       </li>
       <li v-bind:class='{active:choosetab===4}'>
         <div v-for='(item,i) in resume.awards'>
           <div v-for ='(value,key) in item'>
-             <div v-if = 'key==="time"'>
+             <div v-if = 'key==="时间"'>
               <label>时间</label>  
               <el-date-picker :value="value" @input = 'changedata(`${"awards"}.${i}.${key}`,$event)' type="month" value-format ='yyyy.MM' placeholder="选择日期"></el-date-picker>
+              <!-- <label>结束时间</label>  
+              <el-date-picker :value="value" @input = 'changedata(`${"awards"}.${i}.${key}`,$event)' type="month" value-format ='yyyy.MM' placeholder="选择日期"></el-date-picker> -->
              </div>
              <div v-else>
                <label>{{key}}</label>
-                <el-input :value="value" @input = 'changedata(`${"awards"}.${i}.${key}`,$event)' placeholder="请输入内容"></el-input>
+                <el-input :value="value" @input = 'changedata(`${"awards"}.${i}.${key}`,$event)' v-bind:placeholder="`请输入内容${key}`"></el-input>
              </div>
           </div>
+             <i class="el-icon-delete" @click.prevent='deleteitem(item,"awards")'></i>
+             <hr>
         </div>
+        <button class="addmore" @click.prevent='additem("awards")'>+</button>
       </li>
       <li v-bind:class='{active:choosetab===5}'>
         <div v-for ='(value,key) in resume.introduce'>
             <label>{{key}}</label> 
-          <el-input type="textarea" :rows="4"  @input = 'changedata(`${"introduce"}.${key}`,$event)' placeholder="请输入内容" ></el-input>
+          <el-input type="textarea" :rows="4"  @input = 'changedata(`${"introduce"}.${key}`,$event)' v-bind:placeholder="`请简述${key}`" ></el-input>
         </div>
       </li>
     </ul>
@@ -110,11 +124,15 @@ export default {
     }
   },
   methods: {
-    add1(){
-      this.$store.commit("addproject");
+    additem(item) {
+      this.$store.commit("addproject", item);
+    },
+    deleteitem(item, which) {
+      // console.log(item)
+      this.$store.commit("deleteproject", { item, which });
     },
     changedata(path, value) {
-      console.log(path);
+      // console.log(path);
       this.$store.commit("updata", {
         path,
         value
@@ -159,18 +177,53 @@ export default {
     li {
       display: none;
       margin: 0 auto;
-      div{
+      div {
         margin: 8px 0;
       }
+      label {
+        display: block;
+        font-size: 0.8rem;
+        color: #555;
+      }
       .el-textarea__inner:focus {
-        border-color:#bbb;
+        border-color: #bbb;
         outline: 0;
         /* text-shadow: 0 0 black; */
       }
       .el-input__inner:focus {
-        border-color:#bbb;
+        border-color: #bbb;
         outline: 0;
         /* text-shadow: 0 0 black; */
+      }
+      .el-range-editor.is-active,
+      .el-range-editor.is-active:hover {
+        border-color: #bbb;
+      }
+      .el-icon-delete {
+        color: orange;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+      .el-icon-delete:hover {
+        opacity: 0.7;
+      }
+      hr {
+        border: 0.5px solid #d8dce5;
+      }
+      .addmore {
+        background: #8ac0e2;
+        border: 1px solid #8ac0e2;
+        color: white;
+        font-size: 1.5rem;
+        padding: 4px 32px;
+        border-radius: 5px;
+        outline-style: none;
+        display: block;
+        margin: 0 auto;
+        cursor: pointer;
+      }
+      .addmore:hover {
+        opacity: 0.7;
       }
     }
     .active {

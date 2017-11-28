@@ -20,6 +20,7 @@ export default new Vuex.Store({
       ],
       profile: {
         姓名: "",
+        职业: "",
         居住城市: "",
         年龄: "",
         Email: "",
@@ -27,11 +28,14 @@ export default new Vuex.Store({
         Github: "",
         求职意向: ""
       },
-      workhistory: {
-        公司: "",
-        时间: "",
-        职位: ""
-      },
+      workhistory: [
+        {
+          公司: "",
+          开始时间: "",
+          结束时间: "",
+          职位: ""
+        }
+      ],
       projects: [
         {
           项目: "",
@@ -47,7 +51,7 @@ export default new Vuex.Store({
       },
       awards: [
         {
-          time: "",
+          时间: "",
           奖项: ""
         }
       ],
@@ -60,17 +64,33 @@ export default new Vuex.Store({
   mutations: {
     switchTab(state, payload) {
       state.choosetab = payload;
+      localStorage.setItem("state", JSON.stringify(state));
     },
     updata(state, { path, value }) {
       objectPath.set(state.resume, path, value);
+      localStorage.setItem("state", JSON.stringify(state));
     },
-    addproject(state) {
-      state.resume.projects.push({
-        项目: "",
-        项目简介: "",
-        预览地址: ""
-      });
+    initState(state, payload) {
+      Object.assign(state, payload);
     },
+    addproject(state, payload) {
+      if (payload === "workhistory") {
+        state.resume[payload].push({ 公司: "", 开始时间: "", 结束时间: "",职位: "" });
+      } else if (payload === "projects") {
+        state.resume[payload].push({ 项目: "", 项目简介: "", 预览地址: "" });
+      } else if (payload === "awards") {
+        state.resume[payload].push({ time: "", 奖项: "" });
+      }
+      // Object.assign(obj, state.resume[payload][0]);
+      // for(let value in obj){
+      //     obj[value]='';
+      // }
+      // state.resume[payload].push(obj);
+    }, //添加一个item
+    deleteproject(state, { item, which }) {
+      let index = state.resume[which].indexOf(item);
+      state.resume[which].splice(index, 1);
+    }, //删除item
     signup(state) {
       state.Login = 0;
     },

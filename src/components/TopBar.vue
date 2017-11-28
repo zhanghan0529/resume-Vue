@@ -6,13 +6,11 @@
     <div class='topbarbtn'>
       <el-button type="info" size="small">预览</el-button>
       <el-button type="info" size="small">保存</el-button>
-      <el-button type="info" size="small">注销</el-button>
-      
+      <el-button type="info" size="small">登出</el-button>     
     </div>
     
   </div>
 </template>
-
 
 <style lang="scss">
 #topbar {
@@ -27,7 +25,6 @@
   animation: fade-in 0.3s;
   .logo img {
     width:12rem;
-    
   }
 
 }
