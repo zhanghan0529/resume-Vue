@@ -56,8 +56,8 @@ export default {
       console.log(4)
     },
     loginout(){
-      // localStorage.clear()
-      location.reload()
+      localStorage.clear()
+      // location.reload()
       AV.User.logOut();
       this.$store.commit('isUser',null)
     }
