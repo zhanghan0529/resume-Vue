@@ -9,6 +9,10 @@ export default new Vuex.Store({
     count: 0,
     choosetab: 0,
     currentUser: null,
+    user: {
+      id:'',
+      usename:''
+    },
     resume: {
       config: [
         { field: "profile", icon: "mingpian" },
@@ -46,7 +50,8 @@ export default new Vuex.Store({
       school: {
         学校: "",
         专业: "",
-        time: "",
+        开始时间: "",
+        结束时间:"",
         学位: ""
       },
       awards: [
@@ -79,7 +84,7 @@ export default new Vuex.Store({
       } else if (payload === "projects") {
         state.resume[payload].push({ 项目: "", 项目简介: "", 预览地址: "" });
       } else if (payload === "awards") {
-        state.resume[payload].push({ time: "", 奖项: "" });
+        state.resume[payload].push({ 时间: "", 奖项: "" });
       }
       // Object.assign(obj, state.resume[payload][0]);
       // for(let value in obj){
@@ -96,6 +101,13 @@ export default new Vuex.Store({
     },
     login(state) {
       state.Login = 1;
+    },
+    setUser(state,payload){
+      Object.assign(state.user,payload)
+      // console.log(state.user)
+    },
+    isUser(state,payload){
+     this.state.currentUser = payload;
     }
   }
 });

@@ -68,11 +68,14 @@
       </li>
       <li v-bind:class='{active:choosetab===3}'>
          <div v-for='(value,key) in resume.school'>
-          <div v-if='key==="time"'>
-            <label>时间</label>  
-              <el-date-picker :value="value" @input = 'changedata(`${"school"}.${key}`,$event)' value-format ='yyyy.MM' type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
-              </el-date-picker>
-          </div>
+            <div v-if='key==="开始时间"||key==="结束时间"'>
+              <label>{{key}}</label>      
+             <!-- <el-date-picker :value="value" @input = 'changedata(`${"workhistory"}.${i}.${key}`,$event)' value-format ='yyyy.MM' type="daterange" selectableRange= "string" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">ZA
+              </el-date-picker> -->
+              <el-date-picker :value="value" @input = 'changedata(`${"school"}.${key}`,$event)' type="month" value-format ='yyyy.MM' placeholder="选择日期"></el-date-picker>
+            </div>
+              <!-- <el-date-picker :value="value" @input = 'changedata(`${"school"}.${key}`,$event)' value-format ='yyyy.MM' type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
+              </el-date-picker> -->
           <div v-else>
             <label>{{key}}</label>  
                <el-input :value="value" @input = 'changedata(`${"school"}.${key}`,$event)' v-bind:placeholder="`请输入${key}`"></el-input>
@@ -90,7 +93,7 @@
              </div>
              <div v-else>
                <label>{{key}}</label>
-                <el-input :value="value" @input = 'changedata(`${"awards"}.${i}.${key}`,$event)' v-bind:placeholder="`请输入内容${key}`"></el-input>
+                <el-input :value="value" @input = 'changedata(`${"awards"}.${i}.${key}`,$event)' v-bind:placeholder="`请输入${key}`"></el-input>
              </div>
           </div>
              <i class="el-icon-delete" @click.prevent='deleteitem(item,"awards")'></i>

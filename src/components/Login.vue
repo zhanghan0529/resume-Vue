@@ -17,7 +17,7 @@
             <div class='message'>{{message}}</div>
           </form>
         </div>
-        <div class="signup" v-else>
+        <div class="signup" v-else> 
           <form @submit.prevent = 'signUp'>
             <input type="text" v-model = 'formData.username' value="" placeholder="账号">
             <input type="password" v-model='formData.password' value="" placeholder="密码">
@@ -33,6 +33,7 @@
 </template>
 <script>
 import AV from "../lib/leancloud";
+import getUser from '../lib/getUser'
 export default {
   data() {
     return {
@@ -51,25 +52,30 @@ export default {
       if (password === cfpassword) {
         user.setUsername(username);
         user.setPassword(password);
-        user.signUp().then(loginedUser => {
-          this.message = "注册成功";
-          // this.$store.commit("login");
-        },
-        (error)=> {
-          this.message = "注册失败⊙﹏⊙" ;
-        });
+        user.signUp().then(
+          loginedUser => {
+            this.message = "注册成功";
+          },
+          error => {
+            this.message = "注册失败⊙﹏⊙";
+          }
+        );
       } else {
         this.message = "两次密码不一致~";
       }
     },
     Login() {
       let { username, password } = this.formData;
-      AV.User
-        .logIn(username, password)
-        .then(loginedUser => {}, (error)=> {
+      AV.User.logIn(username, password).then(
+        loginedUser => {
+          this.$emit("success", getUser());
+          this.$store.commit('isUser',getUser())
+        },
+        error => {
           // this.message = "用户不存在或者密码错误~";
           this.message = "用户不存在或者密码错误~";
-        });
+        }
+      );
     },
     signup() {
       this.$store.commit("signup");
