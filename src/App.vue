@@ -59,7 +59,7 @@ export default {
   methods: {
     logined(user) {
       // this.$store.state
-      location.reload();
+      // location.reload();
       this.$store.commit("setUser", user);
       this.getResume()
     },
