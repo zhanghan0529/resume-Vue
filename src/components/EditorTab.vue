@@ -1,16 +1,17 @@
 <template>
-  <div id="editor">
+ <transition name="slide-fade">
+  <div id="editor" v-if = 'count.show'>
     <ul class='class-icons' >
-      <li v-for = "(item,index) in resume.config" v-bind:class="{active:choosetab===index}" @click = 'choosetab = index'>
+      <li v-for = "(item,index) in count.resume.config" v-bind:class="{active:choosetab===index}" @click = 'choosetab = index'>
             <svg class="icon" aria-hidden="true" >
-            <use v-bind:xlink:href="`#icon-${resume.config[index].icon}`"></use>
+            <use v-bind:xlink:href="`#icon-${count.resume.config[index].icon}`"></use>
          </svg>
       </li>
 
     </ul>
     <ul class='to-input'>
 
-      <!-- <li v-for = "(item,index) in resume.config" v-bind:class='{active:choosetab===index}'>
+      <!-- <li v-for = "(item,index) in count.resume.config" v-bind:class='{active:choosetab===index}'>
         <div v-if='resume[item.field] instanceof Array'>
           <div v-for='sumitem in resume[item.field]'>
            <div v-for='(value,key) in sumitem'>
@@ -25,13 +26,13 @@
         </div>   
       </li>  -->
       <li v-bind:class='{active:choosetab===0}'>
-        <div v-for='(value,key) in resume.profile'>
+        <div v-for='(value,key) in count.resume.profile'>
           <label>{{key}}</label>  
           <el-input :value="value" @input = 'changedata(`${"profile"}.${key}`,$event)' v-bind:placeholder="`请输入${key}`"></el-input>
         </div>
       </li>
       <li v-bind:class='{active:choosetab===1}'>
-        <div class="workhistory" v-for="(item,i) in resume.workhistory">
+        <div class="workhistory" v-for="(item,i) in count.resume.workhistory">
           <div v-for='(value,key) in item'>
             <div v-if='key==="开始时间"||key==="结束时间"'>
               <label>{{key}}</label>      
@@ -50,7 +51,7 @@
         <button class="addmore" @click.prevent='additem("workhistory")'>+</button>
       </li>
       <li v-bind:class='{active:choosetab===2}'>
-        <div class="projects" v-for='(item,i) in resume.projects'>
+        <div class="projects" v-for='(item,i) in count.resume.projects'>
           <div v-for ='(value,key) in item'>
              <div v-if = 'key==="项目简介"'>
                <label>{{key}}</label> 
@@ -67,7 +68,7 @@
         <button class="addmore" @click.prevent='additem("projects")'>+</button>
       </li>
       <li v-bind:class='{active:choosetab===3}'>
-         <div v-for='(value,key) in resume.school'>
+         <div v-for='(value,key) in count.resume.school'>
             <div v-if='key==="开始时间"||key==="结束时间"'>
               <label>{{key}}</label>      
              <!-- <el-date-picker :value="value" @input = 'changedata(`${"workhistory"}.${i}.${key}`,$event)' value-format ='yyyy.MM' type="daterange" selectableRange= "string" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">ZA
@@ -83,7 +84,7 @@
         </div>
       </li>
       <li v-bind:class='{active:choosetab===4}'>
-        <div v-for='(item,i) in resume.awards'>
+        <div v-for='(item,i) in count.resume.awards'>
           <div v-for ='(value,key) in item'>
              <div v-if = 'key==="时间"'>
               <label>时间</label>  
@@ -102,14 +103,16 @@
         <button class="addmore" @click.prevent='additem("awards")'>+</button>
       </li>
       <li v-bind:class='{active:choosetab===5}'>
-        <div v-for ='(value,key) in resume.introduce'>
+        <div v-for ='(value,key) in count.resume.introduce'>
             <label>{{key}}</label> 
           <el-input type="textarea" :rows="4"  @input = 'changedata(`${"introduce"}.${key}`,$event)' v-bind:placeholder="`请简述${key}`" ></el-input>
         </div>
       </li>
     </ul>
   </div>
+   </transition>
 </template>
+
 <script>
 export default {
   name: "EditorTab",
@@ -122,8 +125,8 @@ export default {
         return this.$store.commit("switchTab", index);
       }
     },
-    resume() {
-      return this.$store.state.resume;
+    count() {
+      return this.$store.state;
     }
   },
   methods: {
@@ -148,14 +151,14 @@ export default {
  <style lang='scss'>
 #editor {
   width: 30rem;
-  height: 100%;
+  height: 696px;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
   border-radius: 5px;
   margin-right: 1rem;
   display: flex;
-  animation: fade-in 0.3s;
-  overflow: hidden;
+  // animation: fade-in 0.3s;
   background: #f7fafc;
+  overflow: hidden;
   .class-icons {
     height: 100%;
     background: #555;

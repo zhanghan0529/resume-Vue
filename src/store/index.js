@@ -9,6 +9,8 @@ export default new Vuex.Store({
     count: 0,
     choosetab: 0,
     currentUser: null,
+    showresume: 1,
+    show:true,
     user: {
       id:'',
       usename:''
@@ -69,15 +71,15 @@ export default new Vuex.Store({
   mutations: {
     switchTab(state, payload) {
       state.choosetab = payload;
-      localStorage.setItem("state", JSON.stringify(state));
+      // localStorage.setItem("state", JSON.stringify(state));
     },
     updata(state, { path, value }) {
       objectPath.set(state.resume, path, value);
-      localStorage.setItem("state", JSON.stringify(state));
+      // localStorage.setItem("state", JSON.stringify(state));
     },
-    initState(state, payload) {
-      Object.assign(state, payload);
-    },
+    // initState(state, payload) {
+    //   Object.assign(state, payload);
+    // },
     addproject(state, payload) {
       if (payload === "workhistory") {
         state.resume[payload].push({ 公司: "", 开始时间: "", 结束时间: "",职位: "" });
@@ -108,6 +110,11 @@ export default new Vuex.Store({
     },
     isUser(state,payload){
      this.state.currentUser = payload;
+    },
+    showresume(state,payload){
+      this.state.showresume = payload;
+      this.state.show = !this.state.show;
+      console.log(this.state.show);
     }
   }
 });

@@ -3,6 +3,7 @@
 import "./css/reset.css";
 import Vue from 'vue'
 import App from './App'
+// import router from './router'
 import { Button, Input,DatePicker } from "element-ui";
 
 Vue.use(Button);
@@ -12,7 +13,8 @@ Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  template: '<App/>',
+  el: "#app",
+  template: "<App/>",
+  // router,
   components: { App }
 });

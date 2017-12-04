@@ -1,15 +1,16 @@
 <template>
-  <div id = 'topbar'>
+ <transition name="slide-fade">
+  <div id = 'topbar' v-if='resume.show'>
   <div class="logo">
       <img  src="//ozuq4db16.bkt.clouddn.com/1.PNG" alt="">
     </div>
     <div class='topbarbtn'>
-      <el-button type="info" size="small">预览</el-button>
+      <el-button type="info" size="small" @click = 'previewresume'>预览</el-button>
       <el-button type="info" size="small" @click.prevent='saveORupdate'>保存</el-button>
-      <el-button type="info" size="small" @click.prevent='loginout'>登出</el-button>     
+      <el-button type="info" size="small" @click.prevent='loginout'>登出</el-button>       
     </div>
-    
   </div>
+ </transition>
 </template>
 <script>
 import AV from '../lib/leancloud'
@@ -20,6 +21,9 @@ export default {
     }
   },
   methods:{
+    previewresume(){
+      this.$store.commit("showresume",0)
+    },
     saveORupdate(){
       if(this.resume.resume.id){
         console.log(1)
@@ -56,7 +60,7 @@ export default {
       console.log(4)
     },
     loginout(){
-      localStorage.clear()
+      // localStorage.clear()
       // location.reload()
       AV.User.logOut();
       this.$store.commit('isUser',null)
@@ -65,7 +69,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #topbar {
   width: 100%;
   display: flex;
@@ -75,10 +79,9 @@ export default {
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
   border-radius: 5px;
   background: #f7fafc;
-  animation: fade-in 0.3s;
+  // animation: fade-in 0.3s;
   .logo img {
     width:12rem;
   }
-
 }
 </style>

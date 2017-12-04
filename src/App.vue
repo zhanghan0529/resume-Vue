@@ -4,24 +4,29 @@
       <Login @success='logined($event)'/>
     </div>
     <div v-else class="seciton">
-      <TopBar/>
-      <div class='content'>
-        <EditorTab/>
-        <Preview/>
-      </div>
+      <Resume/>
     </div>
+  </div>
+    <!-- <router-link to="/login" tag="div" v-if = 'count.currentUser===null||count.user.id===""'>
+              <Login @success='logined($event)'/>
+   </router-link>   
+      <router-link  v-else to="/resume" tag='div'>
+      <Resume/>
+      </router-link>
+      
+    <router-view></router-view> -->
+
+    
   </div>
 </template>
 <script>
-import TopBar from "./components/TopBar";
-import EditorTab from "./components/EditorTab";
-import Preview from "./components/Preview";
+
 import Login from "./components/Login";
 import store from "./store/index";
 import AV from "./lib/leancloud";
 import "./css/csshake-slow.min.css";
 import getUser from "./lib/getUser";
-
+import Resume from './components/Resume';
 export default {
   name: "app",
   store,
@@ -35,15 +40,13 @@ export default {
     this.$store.commit("setUser", getUser());
     this.$store.commit("isUser", getUser());
     if (this.count.user.id) {
-      console.log(1);
+      // console.log(1);
       this.getResume()
     }
   },
   components: {
-    TopBar,
-    EditorTab,
-    Preview,
-    Login
+    Login,
+    Resume,
   },
   computed: {
     count() {
@@ -56,6 +59,7 @@ export default {
   methods: {
     logined(user) {
       // this.$store.state
+      location.reload();
       this.$store.commit("setUser", user);
       this.getResume()
     },
@@ -81,19 +85,19 @@ export default {
     opacity: 1;
   }
 }
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave-active {
+  transition: all .2s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active for below version 2.1.8 */ {
+  transform: translateY(-10px);
+  opacity: 0;
+}
 #app {
   background: linear-gradient(to bottom, #8ac0e2, #f7fafc);
 }
-.seciton {
-  /* height: 100%; */
-  padding: 16px;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-.content {
-  margin-top: 16px;
-  display: flex;
-  height: 100%;
-}
+
 </style>
